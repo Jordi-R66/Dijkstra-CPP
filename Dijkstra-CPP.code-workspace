@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"*.h": "c",
+			"iostream": "cpp",
+			"ostream": "cpp",
+			"string": "cpp"
+		}
+	}
+}
