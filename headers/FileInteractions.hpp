@@ -1,10 +1,13 @@
 #ifndef FILES_H
 #define FILES_H
+
 #include "commons.hpp"
+#include "Utils.hpp"
 
 namespace Dijkstra {
 	namespace Fichiers {
-		void SerializeGraph(Utils::Graph graph);
+		vector<Utils::Sommet> ImporterSommets(string filename);
 	}
 }
+
 #endif
