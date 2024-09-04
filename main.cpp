@@ -20,7 +20,11 @@ void PreInit() {
 	return;
 }
 
-double Poids(Utils::Sommet s) {return 0.0;}
+double Poids(Utils::Sommet s1, Utils::Sommet s2) {
+	double poids = sqrt(pow(s2.x - s1.x, 2) + pow(s2.y - s1.y, 2) + pow(s2.z - s1.z, 2));
+
+	return poids;
+}
 
 int main() {
 	// Utils::Sommet s(0ULL, "Hullo", 0.0, 0.0, 0.0);
