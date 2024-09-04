@@ -17,7 +17,7 @@ dict<int64_t, Utils::Sommet> CORRESPONDANCE;
 Utils::Sommet SOMMET_NULL(-1, "null", HUGE_VAL, HUGE_VAL, HUGE_VAL);
 
 void PreInit() {
-	return;
+	
 }
 
 double Poids(Utils::Sommet s1, Utils::Sommet s2) {
@@ -25,6 +25,8 @@ double Poids(Utils::Sommet s1, Utils::Sommet s2) {
 
 	return poids;
 }
+
+
 
 int main() {
 	// Utils::Sommet s(0ULL, "Hullo", 0.0, 0.0, 0.0);
