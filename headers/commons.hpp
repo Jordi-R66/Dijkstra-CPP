@@ -6,7 +6,11 @@
 #include <vector>
 #include <unordered_map>
 
+#include <iostream>
+#include <fstream>
+
 #include <stdint.h>
 
 #define dict unordered_map
+
 #endif
