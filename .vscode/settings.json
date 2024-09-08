@@ -3,6 +3,7 @@
 		"*.h": "c",
 		"iostream": "cpp",
 		"ostream": "cpp",
-		"string": "cpp"
+		"string": "cpp",
+		"iosfwd": "cpp"
 	}
 }
