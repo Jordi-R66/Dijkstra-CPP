@@ -1,6 +1,6 @@
 {
 	"Compiler": "g++",
-	"Parameters": ["-Oz", "-s", "-std=c++17", "-m64", "-march=x86-64", "-flto"],
+	"Parameters": ["-std=c++17", "-m64", "-march=x86-64"],
 	"OutputPath": "",
 	"OutputName": "Dijkstra",
 	"Sources": ["main.cpp", "headers/Utils.cpp", "headers/FileInteractions.cpp"],

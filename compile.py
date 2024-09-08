@@ -20,6 +20,8 @@ def compile(compiler: str, compiler_args: list[str], output: str, sources: list[
 	lm: str = " -lm" if ((platform == "linux") & (use_math)) else ""
 	compile_command: str = f"{compiler} {compiler_args} {sources_string} -o {output}{EXEC_EXT}{lm}"
 
+	print(f"Compilation command : {compile_command}")
+
 	system(compile_command)
 
 if path.exists("compile_conf.json"):
