@@ -53,7 +53,7 @@ def ParseSommets(filepath: str):
 
 			Sommets.append(Sommet(Id, name, *coords))
 			CorrSommets[name] = Id
-		Id += 1
+			Id += 1
 
 	Sommets.sort(key=lambda x: x.id)
 
