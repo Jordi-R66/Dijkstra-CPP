@@ -33,6 +33,7 @@
 
 # Dataset files
 France.json
+*.csv
 
 # Other python scripts
 Algo.py
