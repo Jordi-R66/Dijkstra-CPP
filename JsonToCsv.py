@@ -86,7 +86,7 @@ def ParseLiens(filepath: str):
 			idA: int = CorrSommets[nameA]
 			idB: int = CorrSommets[nameB]
 
-			Liens.append(Lien(nameA, nameB, mode))
+			Liens.append(Lien(idA, idB, mode))
 
 	Liens.sort(key=lambda x: x.idA)
 
