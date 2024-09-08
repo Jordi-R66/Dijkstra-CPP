@@ -4,10 +4,10 @@
 #include "commons.hpp"
 #include "Utils.hpp"
 
-namespace Dijkstra {
-	namespace Fichiers {
-		vector<Utils::Sommet> ImporterSommets(string filename);
-	}
+namespace Fichiers {
+	void LoadVerticesFromCSV(string VerticesFile, vector<Sommet>* vecSommets);
+	void LoadLinksFromCSV(string LinksFile, vector<Lien>* vecLiens);
+	Utils::Graph LoadGraphFromCSV(string VerticesFile, string LinksFile);
 }
 
 #endif
