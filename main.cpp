@@ -6,18 +6,20 @@
 #include <math.h>
 
 using namespace std;
+
 using namespace Dijkstra;
+using namespace Utils;
 using namespace Fichiers;
 
-vector<Utils::Sommet> SOMMETS_OG = {};
-vector<Utils::Lien> LIENS_OG = {};
+vector<Sommet> SOMMETS_OG = {};
+vector<Lien> LIENS_OG = {};
 
-dict<int64_t, Utils::Sommet> CORRESPONDANCE;
+dict<int64_t, Sommet> CORRESPONDANCE;
 
-Utils::Sommet SOMMET_NULL(-1, "null", HUGE_VAL, HUGE_VAL, HUGE_VAL);
+Sommet SOMMET_NULL(-1, "null", HUGE_VAL, HUGE_VAL, HUGE_VAL);
 
 void PreInit() {
-	
+	return;
 }
 
 double Poids(Utils::Sommet s1, Utils::Sommet s2) {
@@ -25,7 +27,6 @@ double Poids(Utils::Sommet s1, Utils::Sommet s2) {
 
 	return poids;
 }
-
 
 
 int main() {
