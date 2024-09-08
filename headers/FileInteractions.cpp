@@ -1,19 +1,17 @@
 #include "FileInteractions.hpp"
 
 using namespace std;
-
 using namespace Dijkstra;
-using namespace Fichiers;
-using namespace Utils;
 
 Utils::Graph LoadGraphFromCSV(string VerticesFile, string SidesFile) {
-	vector<Sommet> sommets;
-	vector<Lien> liens;
+	vector<Dijkstra::Utils::Sommet> sommets;
+	vector<Dijkstra::Utils::Lien> liens;
 
-
+	return Dijkstra::Utils::Graph(sommets, liens);
 }
 
-void LoadVerticesFromCSV(string VerticesFile, vector<Sommet>* vecSommets) {
+vector<Dijkstra::Utils::Sommet> LoadVerticesFromCSV(string VerticesFile) {
+	vector<Dijkstra::Utils::Sommet> vecSommets = {};
 	ifstream myfile;
 
 	string raw_data;
@@ -78,6 +76,8 @@ void LoadVerticesFromCSV(string VerticesFile, vector<Sommet>* vecSommets) {
 		y = stod(tokens[3]);
 		z = stod(tokens[4]);
 
-		vecSommets->push_back(Sommet(id, name, x, y, z));
+		vecSommets.push_back(Dijkstra::Utils::Sommet(id, name, x, y, z));
 	}
+
+	return vecSommets;
 }

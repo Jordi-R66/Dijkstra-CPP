@@ -34,7 +34,7 @@ int main() {
 	string sommets_file = basename + "_s.csv";
 	string liens_file = basename + "_l.csv";
 
-	LoadVerticesFromCSV(sommets_file, &SOMMETS_OG);
+	SOMMETS_OG = LoadVerticesFromCSV(sommets_file);
 	size_t TotalVertices = SOMMETS_OG.size();
 
 	for (size_t i=0; i<TotalVertices; i++) {
