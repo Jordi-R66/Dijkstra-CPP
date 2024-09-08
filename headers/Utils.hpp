@@ -25,11 +25,15 @@ namespace Dijkstra {
 		struct Lien {
 			int64_t idA;
 			int64_t idB;
+
+			Lien(int64_t A, int64_t B);
 		};
 
 		struct Graph {
 			vector<Sommet> sommets;
 			vector<Lien> liens;
+
+			Graph(vector<Sommet> S, vector<Lien> L);
 		};
 	}
 }
