@@ -34,6 +34,8 @@ int main() {
 	string sommets_file = basename + "_s.csv";
 	string liens_file = basename + "_l.csv";
 
+	cout << "Fichier des sommets : " + sommets_file << endl;
+	cout << "Fichier des liens : " + liens_file << endl;
 
 	LoadVerticesFromCSV(sommets_file, &SOMMETS_OG);
 	size_t TotalVertices = SOMMETS_OG.size();
