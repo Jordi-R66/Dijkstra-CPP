@@ -3,20 +3,20 @@
 using namespace std;
 using namespace Dijkstra;
 
-Utils::Graph LoadGraphFromCSV(string VerticesFile, string SidesFile) {
+Utils::Graph LoadGraphFromCSV(string VerticesFilename, string SidesFilename) {
 	vector<Dijkstra::Utils::Sommet> sommets;
 	vector<Dijkstra::Utils::Lien> liens;
 
 	return Dijkstra::Utils::Graph(sommets, liens);
 }
 
-vector<Dijkstra::Utils::Sommet> LoadVerticesFromCSV(string VerticesFile) {
+vector<Dijkstra::Utils::Sommet> Fichiers::LoadVerticesFromCSV(string VerticesFilename) {
 	vector<Dijkstra::Utils::Sommet> vecSommets = {};
 	ifstream myfile;
 
 	string raw_data;
 
-	myfile.open(VerticesFile);
+	myfile.open(VerticesFilename);
 	myfile >> raw_data;
 
 	myfile.close();

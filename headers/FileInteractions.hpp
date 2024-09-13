@@ -8,9 +8,9 @@ using namespace std;
 
 namespace Dijkstra {
 	namespace Fichiers {
-		vector<Utils::Sommet> LoadVerticesFromCSV(string VerticesFile);
+		vector<Utils::Sommet> LoadVerticesFromCSV(string VerticesFilename);
 		vector<Utils::Lien> LoadLinksFromCSV(string LinksFile);
-		Utils::Graph LoadGraphFromCSV(string VerticesFile, string LinksFile);
+		Utils::Graph LoadGraphFromCSV(string VerticesFilename, string LinksFile);
 	}
 }
 
