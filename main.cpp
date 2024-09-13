@@ -34,8 +34,11 @@ int main() {
 	string sommets_file = basename + "_s.csv";
 	string liens_file = basename + "_l.csv";
 
-	SOMMETS_OG = LoadVerticesFromCSV(sommets_file);
+
+	LoadVerticesFromCSV(sommets_file, &SOMMETS_OG);
 	size_t TotalVertices = SOMMETS_OG.size();
+
+	cout << "Ici" << endl;
 
 	for (size_t i=0; i<TotalVertices; i++) {
 		SOMMETS_OG.at(i).PrintString();

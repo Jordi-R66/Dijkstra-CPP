@@ -10,6 +10,7 @@ Utils::Graph LoadGraphFromCSV(string VerticesFilename, string SidesFilename) {
 	return Dijkstra::Utils::Graph(sommets, liens);
 }
 
+/*
 vector<Dijkstra::Utils::Sommet> Fichiers::LoadVerticesFromCSV(string VerticesFilename) {
 	vector<Dijkstra::Utils::Sommet> vecSommets = {};
 	ifstream myfile;
@@ -28,18 +29,22 @@ vector<Dijkstra::Utils::Sommet> Fichiers::LoadVerticesFromCSV(string VerticesFil
 	vector<string> lines;
 	string line;
 
+	size_t entries = 0;
+
 	for (size_t i=0; i < data_len; i++) {
 		char c = raw_data[i];
 
 		if (c != '\n') {
 			line += c;
 		} else {
+			entries++;
 			lines.push_back(line);
 			line.clear();
 		}
 	}
 
-	lines.erase(lines.begin() + 0);
+	lines.erase(lines.cbegin());
+	cout << "Là" << endl;
 	raw_data.clear();
 
 	size_t vecSize = lines.size();
@@ -80,4 +85,35 @@ vector<Dijkstra::Utils::Sommet> Fichiers::LoadVerticesFromCSV(string VerticesFil
 	}
 
 	return vecSommets;
+}*/
+
+
+void Fichiers::LoadVerticesFromCSV(string VerticesFilename, vector<Dijkstra::Utils::Sommet>* Vertices) {
+	//vector<Dijkstra::Utils::Sommet> vecSommets = {};
+	ifstream myfile;
+
+	string raw_data;
+
+	myfile.open(VerticesFilename);
+	myfile >> raw_data;
+
+	myfile.close();
+
+	size_t data_len = raw_data.length();
+
+	const char sep = '\t';
+
+	size_t n_entries = 0;
+
+	for (size_t i=0; i<data_len; i++) {
+		char c;
+
+		if (c == '\n') {
+			n_entries++;
+		} else if (c == EOF) {
+			break;
+		}
+	}
+
+	cout << n_entries << endl;
 }
