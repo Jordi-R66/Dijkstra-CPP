@@ -1,7 +1,11 @@
 #include "FileInteractions.hpp"
 
+#include <cstring>
+
 using namespace std;
 using namespace Dijkstra;
+
+const char READONLY_MODE = 'r';
 
 Utils::Graph LoadGraphFromCSV(string VerticesFilename, string SidesFilename) {
 	vector<Dijkstra::Utils::Sommet> sommets;
@@ -88,8 +92,9 @@ Utils::Graph LoadGraphFromCSV(string VerticesFilename, string SidesFilename) {
 
 void Fichiers::LoadVerticesFromCSV(string VerticesFilename, vector<Dijkstra::Utils::Sommet>* Vertices) {
 	//vector<Dijkstra::Utils::Sommet> vecSommets = {};
+	char** endptr;
 
-	FILE* fp = fopen(VerticesFilename.c_str(), 'r');
+	FILE* fp = fopen(VerticesFilename.c_str(), &READONLY_MODE);
 
 	//myfile.open(VerticesFilename, ios::in);
 
@@ -100,13 +105,90 @@ void Fichiers::LoadVerticesFromCSV(string VerticesFilename, vector<Dijkstra::Uti
 
 	size_t n_entries = 0;
 
-	char c;
+	char c = 0;
 
 	while (c != EOF) {
 		c = getc(fp);
 
 		if (c == '\n') {
 			n_entries++;
+		}
+	}
+
+	c = 0;
+
+	fseek(fp, 0, SEEK_SET);
+
+	uint8_t col_number = 0;
+	int8_t field_col = 0;
+	int64_t current_entry = 0;
+
+	int64_t id;
+	string name;
+	double x,y,z;
+
+	char current_id[20];
+
+	char current_x[30];
+	char current_y[30];
+	char current_z[30];
+
+	memset(current_id, 0, 20);
+	memset(current_x, 0, 30);
+	memset(current_y, 0, 30);
+	memset(current_z, 0, 30);
+
+	while (c != EOF) {
+		c = getc(fp);
+
+		if (c == '\t') {
+			col_number++;
+			field_col = 0;
+
+		} else if (c == '\n') {
+			//printf("%l\t%s\t");
+			printf("\n");
+			id = strtol(current_id, endptr, 10);
+
+			x = strtod(current_x, endptr);
+			y = strtod(current_y, endptr);
+			z = strtod(current_z, endptr);
+
+			Utils::Sommet s = {id, name, x, y, z};
+			Vertices->push_back(s);
+
+			name.clear();
+			col_number = 0;
+			field_col = 0;
+
+		} else {
+			switch (col_number) {
+				case 0:
+					current_id[field_col] = c;
+					break;
+
+				case 1:
+					name.push_back(c);
+					break;
+
+				case 2:
+					current_x[field_col] = c;
+					break;
+
+				case 3:
+					current_y[field_col] = c;
+					break;
+
+				case 4:
+					current_z[field_col] = c;
+					break;
+
+				default:
+					break;
+			}
+
+			printf("%c", c);
+			field_col++;
 		}
 	}
 
