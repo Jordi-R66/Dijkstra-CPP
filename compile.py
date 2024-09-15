@@ -89,19 +89,3 @@ if path.exists("compile_conf.json"):
 
 	if valid_steps >= 7:
 		compile(COMPILER, PARAMS, OUTPUT, SOURCE_FILES, USE_MATH)
-
-
-# COMPILER: str = "gcc"
-
-# #PARAMS: str = "-w -O3 -O1 -std=c17 -mconsole -m64 -march=x86-64 -flto"
-# #PARAMS: str = "-O3 -march=native -flto -ffunction-sections -fdata-sections -Wl,--gc-sections"
-# #PARAMS = "-O3 -march=native -flto -ffunction-sections -fdata-sections -Wl,--gc-sections -Wl,--strip-all -fomit-frame-pointer -finline-functions -fpeel-loops -funswitch-loops -fsplit-paths -ftree-vectorize"
-# #PARAMS = "-O3 -std=c17 -mconsole -m64 -march=native -flto -ffunction-sections -fdata-sections -Wl,--gc-sections -Wl,--strip-all -fomit-frame-pointer -finline-functions -fpeel-loops -funswitch-loops -ftree-vectorize"
-
-# SOURCE_FILES = ["libs/TleFiles.c", "libs/OrbMaths.c", "libs/TleParser.c", "libs/CONVERSIONS.c", "TLE.c"]
-
-# EXECUTABLE = f"{OUTPUT_PATH}TLE{EXEC_EXT}"
-
-# COMPILE_COMMAND: str = f"{COMPILER} {PARAMS} {' '.join(SOURCE_FILES)} -o {EXECUTABLE}"
-
-# system(COMPILE_COMMAND)
