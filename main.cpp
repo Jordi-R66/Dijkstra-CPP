@@ -3,7 +3,7 @@
 #include "headers/Utils.hpp"
 #include "headers/FileInteractions.hpp"
 
-#include <math.h>
+#include <cmath>
 
 using namespace std;
 
