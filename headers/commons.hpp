@@ -6,12 +6,12 @@
 #include <vector>
 #include <unordered_map>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <iostream>
-#include <fstream>
+#include <cstdio>
+#include <cstdlib>
+//#include <iostream>
+//#include <fstream>
 
-#include <stdint.h>
+#include <cstdint>
 
 #define dict unordered_map
 
