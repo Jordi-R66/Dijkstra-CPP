@@ -15,7 +15,7 @@ namespace Dijkstra {
 			cout << "Sommet(id=" << id << ", name=" << name << ", x=" << to_string(x) << ", y=" << to_string(y) << ", z=" << to_string(z) << ")" << endl;
 		}
 
-		Lien::Lien(int64_t A, int64_t B) : idA(A), idB(B) {
+		Lien::Lien(int64_t A, int64_t B, TypeLien T) : idA(A), idB(B), type(T) {
 			return;
 		}
 

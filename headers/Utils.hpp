@@ -7,6 +7,10 @@ using namespace std;
 
 namespace Dijkstra {
 	namespace Utils {
+		typedef enum {
+			LIEN_UNI = 1,
+			LIEN_BI = 2
+		} TypeLien;
 
 		struct Sommet {
 			int64_t id;
@@ -26,7 +30,9 @@ namespace Dijkstra {
 			int64_t idA;
 			int64_t idB;
 
-			Lien(int64_t A, int64_t B);
+			TypeLien type;
+
+			Lien(int64_t A, int64_t B, TypeLien T);
 		};
 
 		struct Graph {

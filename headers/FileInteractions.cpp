@@ -6,13 +6,14 @@ using namespace std;
 using namespace Dijkstra;
 
 const char READONLY_MODE = 'r';
+const char sep = '\t';
 
-Utils::Graph LoadGraphFromCSV(string VerticesFilename, string SidesFilename) {
+/*void Fichiers::LoadGraphFromCSV(string VerticesFilename, string LinksFilename, Dijkstra::Utils::Graph* WorkGraph) {
 	vector<Dijkstra::Utils::Sommet> sommets;
 	vector<Dijkstra::Utils::Lien> liens;
 
-	return Dijkstra::Utils::Graph(sommets, liens);
-}
+	return;
+}*/
 
 /*vector<Dijkstra::Utils::Sommet> Fichiers::LoadVerticesFromCSV(string VerticesFilename) {
 	vector<Dijkstra::Utils::Sommet> vecSommets = {};
@@ -91,17 +92,10 @@ Utils::Graph LoadGraphFromCSV(string VerticesFilename, string SidesFilename) {
 }*/
 
 void Fichiers::LoadVerticesFromCSV(string VerticesFilename, vector<Dijkstra::Utils::Sommet>* Vertices) {
-	//vector<Dijkstra::Utils::Sommet> vecSommets = {};
+
 	char** endptr;
 
 	FILE* fp = fopen(VerticesFilename.c_str(), &READONLY_MODE);
-
-	//myfile.open(VerticesFilename, ios::in);
-
-	//string current_line;
-	//size_t data_len = raw_data.length();
-
-	const char sep = '\t';
 
 	size_t n_entries = 0;
 
@@ -146,8 +140,6 @@ void Fichiers::LoadVerticesFromCSV(string VerticesFilename, vector<Dijkstra::Uti
 			field_col = 0;
 
 		} else if (c == '\n') {
-			//printf("%l\t%s\t");
-			//printf("\n");
 			id = strtol(current_id, endptr, 10);
 
 			x = strtod(current_x, endptr);
@@ -187,11 +179,95 @@ void Fichiers::LoadVerticesFromCSV(string VerticesFilename, vector<Dijkstra::Uti
 					break;
 			}
 
-			//printf("%c", c);
 			field_col++;
 		}
 	}
 
-	cout << n_entries << endl;
+	//cout << n_entries << endl;
+	fclose(fp);
+}
+
+void Fichiers::LoadLinksFromCSV(string LinksFilename, vector<Dijkstra::Utils::Lien>* Links) {
+	char **endptr;
+
+	FILE* fp = fopen(LinksFilename.c_str(), &READONLY_MODE);
+
+	size_t n_entries = 0;
+
+	char c = 0;
+
+	while (c != EOF) {
+		c = getc(fp);
+
+		if (c == '\n') {
+			n_entries++;
+		}
+	}
+
+	c = 0;
+
+	fseek(fp, 0, SEEK_SET);
+	uint8_t col_number = 0;
+	int8_t field_col = 0;
+	int64_t current_entry = 0;
+
+	int64_t idA;
+	int64_t idB;
+	Utils::TypeLien type;
+
+	char current_idA[20];
+	char current_idB[20];
+	char current_type[2];
+
+	memset(current_idA, 0, 20);
+	memset(current_idB, 0, 20);
+	memset(current_type, 0, 2);
+
+	while (c != EOF) {
+		c = getc(fp);
+
+		if (c == sep) {
+			col_number++;
+			field_col = 0;
+
+		} else if (c == '\n') {
+			idA = strtol(current_idA, endptr, 10);
+			idB = strtol(current_idB, endptr, 10);
+
+			type = (Dijkstra::Utils::TypeLien)strtol(current_type, endptr, 10);
+
+			Utils::Lien l = {idA, idB, type};
+			Links->push_back(l);
+
+			col_number = 0;
+			field_col = 0;
+
+		} else {
+			switch (col_number) {
+				case 0:
+					current_idA[field_col] = c;
+					break;
+
+				case 1:
+					current_idA[field_col] = c;
+					break;
+
+				case 2:
+					if (c == '1') {
+						type = Dijkstra::Utils::LIEN_UNI;
+					} else if (c == '2') {
+						type = Dijkstra::Utils::LIEN_BI;
+					}
+					break;
+
+				default:
+					break;
+			}
+
+			field_col++;
+		}
+	}
+
+	//cout << n_entries << endl;
 	fclose(fp);
 }
