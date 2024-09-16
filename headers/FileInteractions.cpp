@@ -98,7 +98,7 @@ void Fichiers::LoadVerticesFromCSV(string VerticesFilename, vector<Dijkstra::Uti
 
 	//myfile.open(VerticesFilename, ios::in);
 
-	string current_line;
+	//string current_line;
 	//size_t data_len = raw_data.length();
 
 	const char sep = '\t';
@@ -141,13 +141,13 @@ void Fichiers::LoadVerticesFromCSV(string VerticesFilename, vector<Dijkstra::Uti
 	while (c != EOF) {
 		c = getc(fp);
 
-		if (c == '\t') {
+		if (c == sep) {
 			col_number++;
 			field_col = 0;
 
 		} else if (c == '\n') {
 			//printf("%l\t%s\t");
-			printf("\n");
+			//printf("\n");
 			id = strtol(current_id, endptr, 10);
 
 			x = strtod(current_x, endptr);
@@ -187,7 +187,7 @@ void Fichiers::LoadVerticesFromCSV(string VerticesFilename, vector<Dijkstra::Uti
 					break;
 			}
 
-			printf("%c", c);
+			//printf("%c", c);
 			field_col++;
 		}
 	}
