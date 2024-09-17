@@ -35,7 +35,9 @@ void PreInit(string basename) {
 	for (size_t i=0; i < TotalVertices; i++) {
 		Sommet* s = &SOMMETS_OG.at(i);
 
-		CORRESPONDANCE.insert_or_assign(s->id, &s);
+		pair<s_id_t, Sommet*> to_insert = {s->id, s};
+
+		CORRESPONDANCE.insert(to_insert);
 	}
 
 	for (size_t i=0; i < TotalLinks; i++) {
@@ -46,18 +48,21 @@ void PreInit(string basename) {
 			s_id_t idA = l.idA;
 			s_id_t idB = l.idB;
 
-			Sommet* sA = CORRESPONDANCE.at(idA);
-			Sommet* sB = CORRESPONDANCE.at(idB);
+			if (CORRESPONDANCE.contains(idA) && CORRESPONDANCE.contains(idB)) {
 
-			bool inA = count(sA->neighbours.begin(), sA->neighbours.end(), idB) == 0 ? false: true;
-			bool inB = count(sB->neighbours.begin(), sB->neighbours.end(), idA) == 0 ? false: true;
+				Sommet* sA = CORRESPONDANCE.at(idA);
+				Sommet* sB = CORRESPONDANCE.at(idB);
 
-			if (!inA) {
-				sA->neighbours.push_back(idB);
-			}
+				bool inA = count(sA->neighbours.begin(), sA->neighbours.end(), idB) == 0 ? false: true;
+				bool inB = count(sB->neighbours.begin(), sB->neighbours.end(), idA) == 0 ? false: true;
 
-			if ((!inB) && (l.type == LIEN_BI)) {
-				sB->neighbours.push_back(idA);
+				if (!inA) {
+					sA->neighbours.push_back(idB);
+				}
+
+				if ((!inB) && (l.type == LIEN_BI)) {
+					sB->neighbours.push_back(idA);
+				}
 			}
 		}
 	}
@@ -78,6 +83,7 @@ vector<Sommet*> Voisins(Sommet s, vector<Sommet>* SOMMETS, vector<Lien>* LIENS) 
 
 	for (size_t i=0; i < n_liens; i++) {
 		Lien l = LIENS->at(i);
+
 		if ((s.id == l.idA) && (l.type != ERR)) {
 			Sommet* s2 = CORRESPONDANCE.at(l.idB);
 			bool contains = count(SOMMETS->begin(), SOMMETS->end(), *s2) == 0 ? false: true;
@@ -85,6 +91,7 @@ vector<Sommet*> Voisins(Sommet s, vector<Sommet>* SOMMETS, vector<Lien>* LIENS) 
 			if (contains) {
 				voisins.push_back(s2);
 			}
+
 		} else if ((l.type == LIEN_BI) && (s.id == l.idB)) {
 			Sommet* s2 = CORRESPONDANCE.at(l.idA);
 			bool contains = count(SOMMETS->begin(), SOMMETS->end(), *s2) == 0 ? false: true;

@@ -114,49 +114,47 @@ void Fichiers::LoadVerticesFromCSV(string VerticesFilename, vector<Dijkstra::Uti
 	fseek(fp, 0, SEEK_SET);
 
 	uint8_t col_number = 0;
-	int8_t field_col = 0;
 	int64_t current_entry = 0;
 
 	s_id_t id;
 	string name;
 	double x,y,z;
 
-	char current_id[20];
+	string current_id = "";
 
-	char current_x[30];
-	char current_y[30];
-	char current_z[30];
-
-	memset(current_id, 0, 20);
-	memset(current_x, 0, 30);
-	memset(current_y, 0, 30);
-	memset(current_z, 0, 30);
+	string current_x;
+	string current_y;
+	string current_z;
 
 	while (c != EOF) {
 		c = getc(fp);
 
 		if (c == sep) {
 			col_number++;
-			field_col = 0;
 
 		} else if (c == '\n') {
-			id = strtol(current_id, endptr, 10);
 
-			x = strtod(current_x, endptr);
-			y = strtod(current_y, endptr);
-			z = strtod(current_z, endptr);
+			id = stol(current_id);
+
+			x = stod(current_x);
+			y = stod(current_y);
+			z = stod(current_z);
 
 			Utils::Sommet s = {id, name, x, y, z};
 			Vertices->push_back(s);
 
-			name.clear();
+			current_id = "";
+			current_x = "";
+			current_y = "";
+			current_z = "";
+
+			name = "";
 			col_number = 0;
-			field_col = 0;
 
 		} else {
 			switch (col_number) {
 				case 0:
-					current_id[field_col] = c;
+					current_id += c;
 					break;
 
 				case 1:
@@ -164,31 +162,29 @@ void Fichiers::LoadVerticesFromCSV(string VerticesFilename, vector<Dijkstra::Uti
 					break;
 
 				case 2:
-					current_x[field_col] = c;
+					current_x += c;
 					break;
 
 				case 3:
-					current_y[field_col] = c;
+					current_y += c;
 					break;
 
 				case 4:
-					current_z[field_col] = c;
+					current_z += c;
 					break;
 
 				default:
 					break;
 			}
-
-			field_col++;
 		}
 	}
 
-	//cout << n_entries << endl;
+	// cout << n_entries << endl;
 	fclose(fp);
 }
 
 void Fichiers::LoadLinksFromCSV(string LinksFilename, vector<Dijkstra::Utils::Lien>* Links) {
-	char **endptr;
+	//char **endptr;
 
 	FILE* fp = fopen(LinksFilename.c_str(), &READONLY_MODE);
 
@@ -208,31 +204,26 @@ void Fichiers::LoadLinksFromCSV(string LinksFilename, vector<Dijkstra::Utils::Li
 
 	fseek(fp, 0, SEEK_SET);
 	uint8_t col_number = 0;
-	int8_t field_col = 0;
 	int64_t current_entry = 0;
 
 	s_id_t idA;
 	s_id_t idB;
 	Utils::TypeLien type;
 
-	char current_idA[20];
-	char current_idB[20];
-	char current_type[2];
-
-	memset(current_idA, 0, 20);
-	memset(current_idB, 0, 20);
-	memset(current_type, 0, 2);
+	string current_idA = "";
+	string current_idB = "";
 
 	while (c != EOF) {
 		c = getc(fp);
 
+		printf("%c", c);
+
 		if (c == sep) {
 			col_number++;
-			field_col = 0;
 
 		} else if (c == '\n') {
-			idA = (s_id_t)strtol(current_idA, endptr, 10);
-			idB = (s_id_t)strtol(current_idB, endptr, 10);
+			idA = stol(current_idA);
+			idB = stol(current_idB);
 
 			if (idA == idB) {
 				type = Utils::TypeLien::ERR;
@@ -242,16 +233,17 @@ void Fichiers::LoadLinksFromCSV(string LinksFilename, vector<Dijkstra::Utils::Li
 			Links->push_back(l);
 
 			col_number = 0;
-			field_col = 0;
+			current_idA = "";
+			current_idB = "";
 
 		} else {
 			switch (col_number) {
 				case 0:
-					current_idA[field_col] = c;
+					current_idA += c;
 					break;
 
 				case 1:
-					current_idA[field_col] = c;
+					current_idB += c;
 					break;
 
 				case 2:
@@ -267,8 +259,6 @@ void Fichiers::LoadLinksFromCSV(string LinksFilename, vector<Dijkstra::Utils::Li
 				default:
 					break;
 			}
-
-			field_col++;
 		}
 	}
 
