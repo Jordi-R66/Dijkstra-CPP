@@ -234,7 +234,7 @@ void Fichiers::LoadLinksFromCSV(string LinksFilename, vector<Dijkstra::Utils::Li
 			idA = strtol(current_idA, endptr, 10);
 			idB = strtol(current_idB, endptr, 10);
 
-			type = (Dijkstra::Utils::TypeLien)strtol(current_type, endptr, 10);
+			//type = (Dijkstra::Utils::TypeLien)strtol(current_type, endptr, 10);
 
 			Utils::Lien l = {idA, idB, type};
 			Links->push_back(l);
@@ -257,6 +257,8 @@ void Fichiers::LoadLinksFromCSV(string LinksFilename, vector<Dijkstra::Utils::Li
 						type = Dijkstra::Utils::LIEN_UNI;
 					} else if (c == '2') {
 						type = Dijkstra::Utils::LIEN_BI;
+					} else {
+						type = Dijkstra::Utils::ERR;
 					}
 					break;
 
