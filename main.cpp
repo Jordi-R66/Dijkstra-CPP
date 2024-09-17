@@ -76,7 +76,7 @@ double Poids(Sommet s1, Sommet s2) {
 	return poids;
 }
 
-vector<Sommet*> Voisins(Sommet s, vector<Sommet>* SOMMETS, vector<Lien>* LIENS) {
+vector<Sommet*> Voisins(Sommet s, vector<Sommet*> SOMMETS, vector<Lien>* LIENS) {
 	size_t n_liens = LIENS->size();
 
 	vector<Sommet*> voisins;
@@ -86,7 +86,7 @@ vector<Sommet*> Voisins(Sommet s, vector<Sommet>* SOMMETS, vector<Lien>* LIENS) 
 
 		if ((s.id == l.idA) && (l.type != ERR)) {
 			Sommet* s2 = CORRESPONDANCE.at(l.idB);
-			bool contains = count(SOMMETS->begin(), SOMMETS->end(), *s2) == 0 ? false: true;
+			bool contains = count(SOMMETS.begin(), SOMMETS.end(), *s2) == 0 ? false: true;
 
 			if (contains) {
 				voisins.push_back(s2);
@@ -94,7 +94,7 @@ vector<Sommet*> Voisins(Sommet s, vector<Sommet>* SOMMETS, vector<Lien>* LIENS) 
 
 		} else if ((l.type == LIEN_BI) && (s.id == l.idB)) {
 			Sommet* s2 = CORRESPONDANCE.at(l.idA);
-			bool contains = count(SOMMETS->begin(), SOMMETS->end(), *s2) == 0 ? false: true;
+			bool contains = count(SOMMETS.begin(), SOMMETS.end(), *s2) == 0 ? false: true;
 
 			if (contains) {
 				voisins.push_back(s2);
@@ -105,8 +105,28 @@ vector<Sommet*> Voisins(Sommet s, vector<Sommet>* SOMMETS, vector<Lien>* LIENS) 
 	return voisins;
 }
 
+dict<Sommet*, double> Initialisation(vector<Sommet*> SOMMETS, Sommet* s_dep_ptr) {
+	Sommet s_dep = *s_dep_ptr;
+
+	dict<Sommet*, double> d = {};
+
+	for (size_t i=0; i < SOMMETS.size(); i++) {
+		Sommet* s = SOMMETS.at(i);
+
+		if (*s != s_dep) {
+			d[s] = PosInf;
+		} else {
+			d[s] = (double)0.0;
+		}
+	}
+
+	return d;
+}
+
 int main() {
 	string basename = "France";
+
+	s_id_t idA, idB;
 
 	PreInit(basename);
 
