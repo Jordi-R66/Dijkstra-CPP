@@ -3,6 +3,7 @@
 #include "headers/Utils.hpp"
 #include "headers/FileInteractions.hpp"
 
+#include <algorithm>
 #include <cmath>
 
 using namespace std;
@@ -11,14 +12,56 @@ using namespace Dijkstra;
 using namespace Utils;
 using namespace Fichiers;
 
+const double PosInf = +INFINITY;
+
 vector<Sommet> SOMMETS_OG = {};
 vector<Lien> LIENS_OG = {};
 
-dict<int64_t, Sommet> CORRESPONDANCE;
+dict<int64_t, Sommet*> CORRESPONDANCE;
 
-Sommet SOMMET_NULL(-1, "null", HUGE_VAL, HUGE_VAL, HUGE_VAL);
+Sommet SOMMET_NULL((s_id_t)-1, "null", PosInf, PosInf, PosInf);
 
-void PreInit() {
+void PreInit(string basename) {
+
+	string sommets_file = basename + "_s.tsv";
+	string liens_file = basename + "_l.tsv";
+
+	LoadVerticesFromCSV(sommets_file, &SOMMETS_OG);
+	LoadLinksFromCSV(liens_file, &LIENS_OG);
+
+	size_t TotalVertices = SOMMETS_OG.size();
+	size_t TotalLinks = LIENS_OG.size();
+
+	for (size_t i=0; i < TotalVertices; i++) {
+		Sommet* s = &SOMMETS_OG.at(i);
+
+		CORRESPONDANCE.insert_or_assign(s->id, &s);
+	}
+
+	for (size_t i=0; i < TotalLinks; i++) {
+		Lien l = LIENS_OG.at(i);
+
+		if (l.type != ERR) {
+
+			s_id_t idA = l.idA;
+			s_id_t idB = l.idB;
+
+			Sommet* sA = CORRESPONDANCE.at(idA);
+			Sommet* sB = CORRESPONDANCE.at(idB);
+
+			bool inA = count(sA->neighbours.begin(), sA->neighbours.end(), idB) == 0 ? false: true;
+			bool inB = count(sB->neighbours.begin(), sB->neighbours.end(), idA) == 0 ? false: true;
+
+			if (!inA) {
+				sA->neighbours.push_back(idB);
+			}
+
+			if ((!inB) && (l.type == LIEN_BI)) {
+				sB->neighbours.push_back(idA);
+			}
+		}
+	}
+
 	return;
 }
 
@@ -28,20 +71,37 @@ double Poids(Sommet s1, Sommet s2) {
 	return poids;
 }
 
+vector<Sommet*> Voisins(Sommet s, vector<Sommet>* SOMMETS, vector<Lien>* LIENS) {
+	size_t n_liens = LIENS->size();
+
+	vector<Sommet*> voisins;
+
+	for (size_t i=0; i < n_liens; i++) {
+		Lien l = LIENS->at(i);
+		if ((s.id == l.idA) && (l.type != ERR)) {
+			Sommet* s2 = CORRESPONDANCE.at(l.idB);
+			bool contains = count(SOMMETS->begin(), SOMMETS->end(), *s2) == 0 ? false: true;
+
+			if (contains) {
+				voisins.push_back(s2);
+			}
+		} else if ((l.type == LIEN_BI) && (s.id == l.idB)) {
+			Sommet* s2 = CORRESPONDANCE.at(l.idA);
+			bool contains = count(SOMMETS->begin(), SOMMETS->end(), *s2) == 0 ? false: true;
+
+			if (contains) {
+				voisins.push_back(s2);
+			}
+		}
+	}
+
+	return voisins;
+}
+
 int main() {
 	string basename = "France";
 
-	string sommets_file = basename + "_s.tsv";
-	string liens_file = basename + "_l.tsv";
-
-	cout << "Fichier des sommets : " + sommets_file << endl;
-	cout << "Fichier des liens : " + liens_file << endl;
-
-	LoadVerticesFromCSV(sommets_file, &SOMMETS_OG);
-	LoadLinksFromCSV(liens_file, &LIENS_OG);
-
-	size_t TotalVertices = SOMMETS_OG.size();
-	size_t TotalLinks = LIENS_OG.size();
+	PreInit(basename);
 
 	return 0;
 }

@@ -14,16 +14,16 @@ namespace Dijkstra {
 		} TypeLien;
 
 		struct Sommet {
-			id_t id;
+			s_id_t id;
 			string name;
 
 			double x;
 			double y;
 			double z;
 
-			vector<id_t> neighbours;
+			vector<s_id_t> neighbours;
 
-			Sommet(id_t id, string name, double x, double y, double z);
+			Sommet(s_id_t id, string name, double x, double y, double z);
 			void PrintString();
 
 			bool operator==(const Sommet& other) const;
@@ -31,12 +31,12 @@ namespace Dijkstra {
 		};
 
 		struct Lien {
-			id_t idA;
-			id_t idB;
+			s_id_t idA;
+			s_id_t idB;
 
 			TypeLien type;
 
-			Lien(id_t A, id_t B, TypeLien T);
+			Lien(s_id_t A, s_id_t B, TypeLien T);
 		};
 
 		struct Graph {

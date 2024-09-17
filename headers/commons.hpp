@@ -15,6 +15,6 @@
 
 #define dict unordered_map
 
-typedef int64_t id_t;
+typedef int64_t s_id_t;
 
 #endif

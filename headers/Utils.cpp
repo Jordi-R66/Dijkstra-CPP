@@ -4,7 +4,7 @@ using namespace std;
 
 namespace Dijkstra {
 	namespace Utils {
-		Sommet::Sommet(id_t id, string name, double x, double y, double z) : id(id), name(name), x(x), y(y), z(z) {
+		Sommet::Sommet(s_id_t id, string name, double x, double y, double z) : id(id), name(name), x(x), y(y), z(z) {
 			this->neighbours = {};
 		}
 
@@ -20,7 +20,7 @@ namespace Dijkstra {
 			return (this->id != other.id);
 		}
 
-		Lien::Lien(id_t A, id_t B, TypeLien T) : idA(A), idB(B), type(T) {
+		Lien::Lien(s_id_t A, s_id_t B, TypeLien T) : idA(A), idB(B), type(T) {
 			return;
 		}
 
