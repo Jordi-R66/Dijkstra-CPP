@@ -9,7 +9,7 @@
 			"*.h": "c",
 			"iostream": "cpp",
 			"ostream": "cpp",
-			"string": "cpp"
+			"string": "cpp",
 		},
 		"vscord.enabled": true
 	}
