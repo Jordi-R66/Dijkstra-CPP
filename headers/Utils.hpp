@@ -21,10 +21,13 @@ namespace Dijkstra {
 			double y;
 			double z;
 
-			vector<int64_t> canReach;
+			vector<int64_t> neighbours;
 
 			Sommet(int64_t id, string name, double x, double y, double z);
 			void PrintString();
+
+			bool operator==(const Sommet& other) const;
+			bool operator!=(const Sommet& other) const;
 		};
 
 		struct Lien {
