@@ -117,7 +117,7 @@ void Fichiers::LoadVerticesFromCSV(string VerticesFilename, vector<Dijkstra::Uti
 	int8_t field_col = 0;
 	int64_t current_entry = 0;
 
-	int64_t id;
+	id_t id;
 	string name;
 	double x,y,z;
 
@@ -211,8 +211,8 @@ void Fichiers::LoadLinksFromCSV(string LinksFilename, vector<Dijkstra::Utils::Li
 	int8_t field_col = 0;
 	int64_t current_entry = 0;
 
-	int64_t idA;
-	int64_t idB;
+	id_t idA;
+	id_t idB;
 	Utils::TypeLien type;
 
 	char current_idA[20];
@@ -231,10 +231,10 @@ void Fichiers::LoadLinksFromCSV(string LinksFilename, vector<Dijkstra::Utils::Li
 			field_col = 0;
 
 		} else if (c == '\n') {
-			idA = strtol(current_idA, endptr, 10);
-			idB = strtol(current_idB, endptr, 10);
+			idA = (id_t)strtol(current_idA, endptr, 10);
+			idB = (id_t)strtol(current_idB, endptr, 10);
 
-			//type = (Dijkstra::Utils::TypeLien)strtol(current_type, endptr, 10);
+			//type = (Utils::TypeLien)strtol(current_type, endptr, 10);
 
 			Utils::Lien l = {idA, idB, type};
 			Links->push_back(l);
