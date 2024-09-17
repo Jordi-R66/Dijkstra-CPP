@@ -9,7 +9,8 @@ namespace Dijkstra {
 	namespace Utils {
 		typedef enum {
 			LIEN_UNI = 1,
-			LIEN_BI = 2
+			LIEN_BI = 2,
+			ERR = 3
 		} TypeLien;
 
 		struct Sommet {
