@@ -86,7 +86,7 @@ vector<Sommet*> Voisins(Sommet s, vector<Sommet*> SOMMETS, vector<Lien>* LIENS) 
 
 		if ((s.id == l.idA) && (l.type != ERR)) {
 			Sommet* s2 = CORRESPONDANCE.at(l.idB);
-			bool contains = count(SOMMETS.begin(), SOMMETS.end(), *s2) == 0 ? false: true;
+			bool contains = count(SOMMETS.begin(), SOMMETS.end(), s2) == 0 ? false: true;
 
 			if (contains) {
 				voisins.push_back(s2);
@@ -94,7 +94,7 @@ vector<Sommet*> Voisins(Sommet s, vector<Sommet*> SOMMETS, vector<Lien>* LIENS) 
 
 		} else if ((l.type == LIEN_BI) && (s.id == l.idB)) {
 			Sommet* s2 = CORRESPONDANCE.at(l.idA);
-			bool contains = count(SOMMETS.begin(), SOMMETS.end(), *s2) == 0 ? false: true;
+			bool contains = count(SOMMETS.begin(), SOMMETS.end(), s2) == 0 ? false: true;
 
 			if (contains) {
 				voisins.push_back(s2);
@@ -123,12 +123,161 @@ dict<Sommet*, double> Initialisation(vector<Sommet*> SOMMETS, Sommet* s_dep_ptr)
 	return d;
 }
 
+Sommet* Trouve_min(vector<Sommet*> SOMMETS, dict<Sommet*, double> d) {
+	double mini = PosInf;
+	Sommet* sommet = &SOMMET_NULL;
+
+	for (size_t i=0; i<SOMMETS.size(); i++) {
+		Sommet* s = SOMMETS.at(i);
+		if (d[s] < mini) {
+			mini = d[s];
+			sommet = s;
+		}
+	}
+
+	return sommet;
+}
+
+tuple<dict<Sommet*, double>, dict<Sommet*, Sommet*>> maj_distances(Sommet* s1, Sommet* s2, dict<Sommet*, double> d, dict<Sommet*, Sommet*> predecesseur) {
+	if (d[s2] > (d[s1] + Poids(*s1, *s2))) {
+		d[s2] = d[s1] + Poids(*s1, *s2);
+		predecesseur[s2] = s1;
+	}
+
+	return make_tuple(d, predecesseur);
+}
+
+tuple<dict<Sommet*, double>, dict<Sommet*, Sommet*>> Algo(vector<Lien>* LIENS, vector<Sommet*> SOMMETS, Sommet s_dep) {
+	dict<Sommet*, double> d = Initialisation(SOMMETS, &s_dep);
+	dict<Sommet*, Sommet*> predecesseur = {};
+
+	vector<Sommet*> SOMMETS_WORK = {};
+	for (size_t i=0; i < SOMMETS.size(); i++) {
+		Sommet* s = SOMMETS.at(i);
+		SOMMETS_WORK.push_back(s);
+	}
+
+	tuple<dict<Sommet*, double>, dict<Sommet*, Sommet*>> Tuple_dP;
+
+	while (SOMMETS_WORK.size() > 0) {
+		Sommet* s1 = Trouve_min(SOMMETS_WORK, d);
+
+		bool contains_s1 = (count(SOMMETS_WORK.begin(), SOMMETS_WORK.end(), s1) > 0);
+		size_t s1_index = (size_t)NULL;
+
+		if (s1 == &SOMMET_NULL) {
+			break;
+		}
+		if (contains_s1) {
+			for (size_t i=0; i<SOMMETS_WORK.size(); i++) {
+				if (SOMMETS_WORK.at(i) == s1) {
+					s1_index = i;
+					break;
+				}
+			}
+
+			SOMMETS_WORK.erase(SOMMETS_WORK.begin()+s1_index);
+		}
+
+		vector<Sommet*> voisins = Voisins(*s1, SOMMETS_WORK, LIENS);
+
+		for (size_t i=0; i<voisins.size(); i++) {
+			Sommet* s2 = voisins.at(i);
+			Tuple_dP = maj_distances(s1, s2, d, predecesseur);
+			d = get<0>(Tuple_dP);
+			predecesseur = get<1>(Tuple_dP);
+		}
+	}
+
+	return make_tuple(d, predecesseur);
+}
+
+tuple<vector<s_id_t>, double> trouver_chemin(Sommet s_dep, Sommet s_fin, dict<s_id_t, s_id_t> predecesseurs_id, dict<Sommet*, double> d) {
+	s_id_t s_id = s_fin.id;
+	s_id_t dep_id = s_dep.id;
+
+	vector<s_id_t> A = {};
+
+	while (s_id != dep_id) {
+		A.push_back(s_id);
+		s_id = predecesseurs_id[s_id];
+	}
+
+	A.push_back(dep_id);
+	ranges::reverse(A);
+
+	return make_tuple(A, d[&s_fin]);
+}
+
 int main() {
-	string basename = "France";
+	string basename = "";
 
 	s_id_t idA, idB;
 
-	PreInit(basename);
+	//PreInit(basename);
+
+	printf("Name of your files : ");
+	cin >> basename;
+
+	if (basename.size() > 0) {
+		PreInit(basename);
+
+		vector<Sommet*> SOMMETS = {};
+		string dep_name, fin_name;
+
+		printf("Starting point : ");
+		cin >> dep_name;
+		printf("End point : ");
+		cin >> fin_name;
+
+		if ((dep_name.size() > 0) && (fin_name.size() > 0) && (dep_name != fin_name)) {
+			for (size_t i=0; i<SOMMETS_OG.size(); i++) {
+				Sommet* s_ptr = &SOMMETS_OG.at(i);
+				Sommet s = *s_ptr;
+
+				SOMMETS.push_back(s_ptr);
+
+				if (s.name == dep_name) {
+					idA = s.id;
+				} else if (s.name == fin_name) {
+					idB = s.id;
+				}
+			}
+
+			Sommet s_dep = *CORRESPONDANCE[idA];
+			Sommet s_fin = *CORRESPONDANCE[idB];
+
+			tuple<dict<Sommet*, double>, dict<Sommet*, Sommet*>> AlgoOutput = Algo(&LIENS_OG, SOMMETS, s_dep);
+			dict<Sommet*, double> d = get<0>(AlgoOutput);
+			dict<Sommet*, Sommet*> predecesseurs = get<1>(AlgoOutput);
+
+			dict<s_id_t, s_id_t> predecesseurs_id = {};
+
+			for (auto kvp = predecesseurs.begin(); kvp != predecesseurs.end(); ++kvp) {
+				Sommet* k = kvp->first;
+				Sommet* v = kvp->second;
+				predecesseurs_id[k->id] = v->id;
+			}
+
+			tuple<vector<s_id_t>, double> TupleChemin = trouver_chemin(s_dep, s_fin, predecesseurs_id, d);
+			double DistanceChemin = get<1>(TupleChemin);
+			vector<s_id_t> Chemin = get<0>(TupleChemin);
+
+			string output = "";
+
+			for (size_t i=0; i<Chemin.size(); i++) {
+				string s_name = CORRESPONDANCE[Chemin.at(i)]->name;
+
+				output += s_name;
+
+				if (i != (Chemin.size()-1)) {
+					output += " -> ";
+				}
+			}
+
+			printf("Path to go from %s to %s (%lf) :\n%s\nPress 'Enter' to quit\n", dep_name.c_str(), fin_name.c_str(), DistanceChemin, output.c_str());
+		}
+	}
 
 	return 0;
 }
