@@ -129,6 +129,10 @@ void Fichiers::LoadVerticesFromCSV(string VerticesFilename, vector<Dijkstra::Uti
 	while (c != EOF) {
 		c = getc(fp);
 
+		if (c == EOF) {
+			break;
+		}
+
 		if (c == sep) {
 			col_number++;
 
@@ -216,7 +220,11 @@ void Fichiers::LoadLinksFromCSV(string LinksFilename, vector<Dijkstra::Utils::Li
 	while (c != EOF) {
 		c = getc(fp);
 
-		printf("%c", c);
+		if (c == EOF) {
+			break;
+		}
+
+		//printf("%c", c);
 
 		if (c == sep) {
 			col_number++;
