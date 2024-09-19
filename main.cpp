@@ -169,7 +169,7 @@ tuple<dict<Sommet*, double>, dict<Sommet*, Sommet*>> Algo(vector<Lien>* LIENS, v
 			break;
 		}
 		if (contains_s1) {
-			for (size_t i=0; i<SOMMETS_WORK.size(); i++) {
+			for (size_t i=0; i < SOMMETS_WORK.size(); i++) {
 				if (SOMMETS_WORK.at(i) == s1) {
 					s1_index = i;
 					break;
@@ -181,7 +181,7 @@ tuple<dict<Sommet*, double>, dict<Sommet*, Sommet*>> Algo(vector<Lien>* LIENS, v
 
 		vector<Sommet*> voisins = Voisins(*s1, SOMMETS_WORK, LIENS);
 
-		for (size_t i=0; i<voisins.size(); i++) {
+		for (size_t i=0; i < voisins.size(); i++) {
 			Sommet* s2 = voisins.at(i);
 			Tuple_dP = maj_distances(s1, s2, d, predecesseur);
 			d = get<0>(Tuple_dP);
@@ -206,7 +206,7 @@ tuple<vector<s_id_t>, double> trouver_chemin(Sommet s_dep, Sommet s_fin, dict<s_
 	A.push_back(dep_id);
 	ranges::reverse(A);
 
-	return make_tuple(A, d[&s_fin]);
+	return make_tuple(A, d[CORRESPONDANCE[s_fin.id]]);
 }
 
 int main() {
@@ -251,6 +251,13 @@ int main() {
 			dict<Sommet*, double> d = get<0>(AlgoOutput);
 			dict<Sommet*, Sommet*> predecesseurs = get<1>(AlgoOutput);
 
+			/*// Utile pour le debug
+
+			for (auto kvp = d.begin(); kvp != d.end(); kvp++) {
+				Sommet s = *kvp->first;
+				printf("\"%s\" : %lf\n", s.name.c_str(), kvp->second);
+			}*/
+
 			dict<s_id_t, s_id_t> predecesseurs_id = {};
 
 			for (auto kvp = predecesseurs.begin(); kvp != predecesseurs.end(); ++kvp) {
@@ -260,8 +267,8 @@ int main() {
 			}
 
 			tuple<vector<s_id_t>, double> TupleChemin = trouver_chemin(s_dep, s_fin, predecesseurs_id, d);
-			double DistanceChemin = get<1>(TupleChemin);
 			vector<s_id_t> Chemin = get<0>(TupleChemin);
+			double DistanceChemin = get<1>(TupleChemin);
 
 			string output = "";
 
@@ -275,7 +282,7 @@ int main() {
 				}
 			}
 
-			printf("Path to go from %s to %s (%lf) :\n%s\nPress 'Enter' to quit\n", dep_name.c_str(), fin_name.c_str(), DistanceChemin, output.c_str());
+			printf("Path to go from %s to %s (%lf) :\n%s\n\n", dep_name.c_str(), fin_name.c_str(), DistanceChemin, output.c_str());
 		}
 	}
 
