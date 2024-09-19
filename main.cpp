@@ -4,6 +4,7 @@
 #include "headers/FileInteractions.hpp"
 
 #include <algorithm>
+#include <chrono>
 #include <cmath>
 
 using namespace std;
@@ -247,7 +248,14 @@ int main() {
 			Sommet s_dep = *CORRESPONDANCE[idA];
 			Sommet s_fin = *CORRESPONDANCE[idB];
 
+			auto start = chrono::high_resolution_clock::now();
+
 			tuple<dict<Sommet*, double>, dict<Sommet*, Sommet*>> AlgoOutput = Algo(&LIENS_OG, SOMMETS, s_dep);
+
+			auto finish = chrono::high_resolution_clock::now();
+
+			int64_t generation_time = chrono::duration_cast<chrono::nanoseconds>(finish-start).count();
+
 			dict<Sommet*, double> d = get<0>(AlgoOutput);
 			dict<Sommet*, Sommet*> predecesseurs = get<1>(AlgoOutput);
 
@@ -272,17 +280,21 @@ int main() {
 
 			string output = "";
 
-			for (size_t i=0; i<Chemin.size(); i++) {
-				string s_name = CORRESPONDANCE[Chemin.at(i)]->name;
+			if (DistanceChemin != PosInf) {
+				for (size_t i=0; i<Chemin.size(); i++) {
+					string s_name = CORRESPONDANCE[Chemin.at(i)]->name;
 
-				output += s_name;
+					output += s_name;
 
-				if (i != (Chemin.size()-1)) {
-					output += " -> ";
+					if (i != (Chemin.size()-1)) {
+						output += " -> ";
+					}
 				}
-			}
 
-			printf("Path to go from %s to %s (%lf) :\n%s\n\n", dep_name.c_str(), fin_name.c_str(), DistanceChemin, output.c_str());
+				printf("Path to go from %s to %s (%lf) :\n%s\nPath found in %lf seconds!\n", dep_name.c_str(), fin_name.c_str(), DistanceChemin, output.c_str(), (double)(generation_time)/1e9);
+			} else {
+				printf("Error : There is no path between those two points\n");
+			}
 		}
 	}
 
