@@ -1,6 +1,4 @@
-#ifndef COMMONS_H
-
-#define COMMONS_H
+#pragma once
 
 #include <string>
 #include <vector>
@@ -17,5 +15,3 @@
 #define dict unordered_map
 
 typedef int64_t s_id_t;
-
-#endif

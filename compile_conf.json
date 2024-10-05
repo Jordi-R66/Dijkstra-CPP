@@ -1,6 +1,6 @@
 {
 	"Compiler": "g++",
-	"Parameters": ["-std=c++20", "-O3", "-s", "-m64", "-march=x86-64"],
+	"Parameters": ["-std=c++20", "-Oz", "-s", "-m64", "-march=x86-64", "-fdata-sections", "-ffunction-sections", "-Wl,--gc-sections"],
 	"OutputPath": "",
 	"OutputName": "Dijkstra",
 	"Sources": ["main.cpp", "headers/Utils.cpp", "headers/FileInteractions.cpp"],

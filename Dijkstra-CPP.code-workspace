@@ -10,7 +10,13 @@
 			"iostream": "cpp",
 			"ostream": "cpp",
 			"string": "cpp",
-			"vector": "cpp"
+			"vector": "cpp",
+			"initializer_list": "cpp",
+			"list": "cpp",
+			"utility": "cpp",
+			"xhash": "cpp",
+			"xstring": "cpp",
+			"xutility": "cpp"
 		},
 		"vscord.enabled": true,
 		"C_Cpp.default.cppStandard": "c++20"

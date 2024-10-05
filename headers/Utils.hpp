@@ -1,5 +1,4 @@
-#ifndef UTILS_H
-#define UTILS_H
+#pragma once
 
 #include "commons.hpp"
 
@@ -47,5 +46,3 @@ namespace Dijkstra {
 		};
 	}
 }
-
-#endif

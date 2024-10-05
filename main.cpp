@@ -30,6 +30,9 @@ void PreInit(string basename) {
 	LoadVerticesFromCSV(sommets_file, &SOMMETS_OG);
 	LoadLinksFromCSV(liens_file, &LIENS_OG);
 
+	SOMMETS_OG.shrink_to_fit();
+	LIENS_OG.shrink_to_fit();
+
 	size_t TotalVertices = SOMMETS_OG.size();
 	size_t TotalLinks = LIENS_OG.size();
 
@@ -81,6 +84,7 @@ vector<Sommet*> Voisins(Sommet s, vector<Sommet*> SOMMETS, vector<Lien>* LIENS) 
 	size_t n_liens = LIENS->size();
 
 	vector<Sommet*> voisins;
+	voisins.reserve(n_liens);
 
 	for (size_t i=0; i < n_liens; i++) {
 		Lien l = LIENS->at(i);
@@ -102,6 +106,8 @@ vector<Sommet*> Voisins(Sommet s, vector<Sommet*> SOMMETS, vector<Lien>* LIENS) 
 			}
 		}
 	}
+
+	voisins.shrink_to_fit();
 
 	return voisins;
 }
@@ -148,13 +154,15 @@ tuple<dict<Sommet*, double>, dict<Sommet*, Sommet*>> maj_distances(Sommet* s1, S
 	return make_tuple(d, predecesseur);
 }
 
-tuple<dict<Sommet*, double>, dict<Sommet*, Sommet*>> Algo(vector<Lien>* LIENS, vector<Sommet*> SOMMETS, Sommet s_dep) {
-	dict<Sommet*, double> d = Initialisation(SOMMETS, &s_dep);
+tuple<dict<Sommet*, double>, dict<Sommet*, Sommet*>> Algo(vector<Lien>* LIENS, vector<Sommet*>* SOMMETS, Sommet s_dep) {
+	dict<Sommet*, double> d = Initialisation(*SOMMETS, &s_dep);
 	dict<Sommet*, Sommet*> predecesseur = {};
 
 	vector<Sommet*> SOMMETS_WORK = {};
-	for (size_t i=0; i < SOMMETS.size(); i++) {
-		Sommet* s = SOMMETS.at(i);
+	SOMMETS_WORK.reserve(SOMMETS->size());
+
+	for (size_t i=0; i < SOMMETS->size(); i++) {
+		Sommet* s = SOMMETS->at(i);
 		SOMMETS_WORK.push_back(s);
 	}
 
@@ -199,12 +207,16 @@ tuple<vector<s_id_t>, double> trouver_chemin(Sommet s_dep, Sommet s_fin, dict<s_
 
 	vector<s_id_t> A = {};
 
+	A.reserve(predecesseurs_id.size()+1);
+
 	while (s_id != dep_id) {
 		A.push_back(s_id);
-		s_id = predecesseurs_id[s_id];
+		s_id = predecesseurs_id.at(s_id);
 	}
 
 	A.push_back(dep_id);
+	A.shrink_to_fit();
+
 	ranges::reverse(A);
 
 	return make_tuple(A, d[CORRESPONDANCE[s_fin.id]]);
@@ -224,6 +236,8 @@ int main() {
 		PreInit(basename);
 
 		vector<Sommet*> SOMMETS = {};
+		SOMMETS.reserve(SOMMETS_OG.size());
+
 		string dep_name, fin_name;
 
 		printf("Starting point : ");
@@ -250,7 +264,7 @@ int main() {
 
 			auto start = chrono::high_resolution_clock::now();
 
-			tuple<dict<Sommet*, double>, dict<Sommet*, Sommet*>> AlgoOutput = Algo(&LIENS_OG, SOMMETS, s_dep);
+			tuple<dict<Sommet*, double>, dict<Sommet*, Sommet*>> AlgoOutput = Algo(&LIENS_OG, &SOMMETS, s_dep);
 
 			auto finish = chrono::high_resolution_clock::now();
 
@@ -291,7 +305,7 @@ int main() {
 					}
 				}
 
-				printf("Path to go from %s to %s (%lf) :\n%s\nPath found in %lf seconds!\n", dep_name.c_str(), fin_name.c_str(), DistanceChemin, output.c_str(), (double)(generation_time)/1e9);
+				printf("Path to go from %s to %s (%lf) :\n%s\nPath found in %.3lf ms!\n", dep_name.c_str(), fin_name.c_str(), DistanceChemin, output.c_str(), (double)(generation_time)/1e6);
 			} else {
 				printf("Error : There is no path between those two points\n");
 			}

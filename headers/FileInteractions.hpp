@@ -1,5 +1,4 @@
-#ifndef FILES_H
-#define FILES_H
+#pragma once
 
 #include "commons.hpp"
 #include "Utils.hpp"
@@ -13,5 +12,3 @@ namespace Dijkstra {
 		//void LoadGraphFromCSV(string VerticesFilename, string LinksFilename, Utils::Graph* WorkGraph);
 	}
 }
-
-#endif
