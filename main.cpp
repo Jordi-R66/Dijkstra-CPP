@@ -77,7 +77,7 @@ void PreInit(string basename) {
 	return;
 }
 
-double Poids(Sommet s1, Sommet s2) {
+double Poids(const Sommet& s1, const Sommet& s2) {
 	double poids = sqrt(pow(s2.x - s1.x, 2) + pow(s2.y - s1.y, 2) + pow(s2.z - s1.z, 2));
 
 	return poids;
