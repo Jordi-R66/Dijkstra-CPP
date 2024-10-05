@@ -19,6 +19,7 @@
 			"xutility": "cpp"
 		},
 		"vscord.enabled": true,
-		"C_Cpp.default.cppStandard": "c++20"
+		"C_Cpp.default.cppStandard": "c++20",
+		"C_Cpp.default.intelliSenseMode": "gcc-x64"
 	}
 }
