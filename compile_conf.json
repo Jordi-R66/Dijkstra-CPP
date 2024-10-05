@@ -1,7 +1,7 @@
 {
 	"Compiler": "g++",
 	"Parameters": ["-std=c++20", "-Oz", "-s", "-m64", "-march=x86-64", "-fdata-sections", "-ffunction-sections", "-Wl,--gc-sections"],
-	"OutputPath": "",
+	"OutputPath": "releases/",
 	"OutputName": "Dijkstra",
 	"Sources": ["main.cpp", "headers/Utils.cpp", "headers/FileInteractions.cpp"],
 	"UseMath": true
