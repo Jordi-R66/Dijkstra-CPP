@@ -10,7 +10,9 @@
 			"iostream": "cpp",
 			"ostream": "cpp",
 			"string": "cpp",
+			"vector": "cpp"
 		},
-		"vscord.enabled": true
+		"vscord.enabled": true,
+		"C_Cpp.default.cppStandard": "c++20"
 	}
 }
