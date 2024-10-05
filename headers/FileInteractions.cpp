@@ -112,6 +112,7 @@ void Fichiers::LoadVerticesFromCSV(string VerticesFilename, vector<Dijkstra::Uti
 	c = 0;
 
 	fseek(fp, 0, SEEK_SET);
+	Vertices->reserve(n_entries);
 
 	uint8_t col_number = 0;
 	int64_t current_entry = 0;
@@ -183,6 +184,8 @@ void Fichiers::LoadVerticesFromCSV(string VerticesFilename, vector<Dijkstra::Uti
 		}
 	}
 
+	Vertices->shrink_to_fit();
+
 	// cout << n_entries << endl;
 	fclose(fp);
 }
@@ -207,6 +210,8 @@ void Fichiers::LoadLinksFromCSV(string LinksFilename, vector<Dijkstra::Utils::Li
 	c = 0;
 
 	fseek(fp, 0, SEEK_SET);
+	Links->reserve(n_entries);
+
 	uint8_t col_number = 0;
 	int64_t current_entry = 0;
 
@@ -269,6 +274,8 @@ void Fichiers::LoadLinksFromCSV(string LinksFilename, vector<Dijkstra::Utils::Li
 			}
 		}
 	}
+
+	Links->shrink_to_fit();
 
 	//cout << n_entries << endl;
 	fclose(fp);
