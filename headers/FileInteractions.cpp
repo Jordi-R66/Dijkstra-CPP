@@ -42,7 +42,7 @@ const char sep = '\t';
 			line += c;
 		} else {
 			entries++;
-			lines.push_back(line);
+			lines.emplace_back(line);
 			line.clear();
 		}
 	}
@@ -85,34 +85,34 @@ const char sep = '\t';
 		y = stod(tokens[3]);
 		z = stod(tokens[4]);
 
-		vecSommets.push_back(Dijkstra::Utils::Sommet(id, name, x, y, z));
+		vecSommets.emplace_back(Dijkstra::Utils::Sommet(id, name, x, y, z));
 	}
 
 	return vecSommets;
 }*/
 
-void Fichiers::LoadVerticesFromCSV(string VerticesFilename, vector<Dijkstra::Utils::Sommet>* Vertices) {
+size_t CountLinesInFile(FILE* fp) {
+    size_t n_entries = 0;
+    char c = 0;
+
+    while ((c = getc(fp)) != EOF) {
+        if (c == '\n') {
+            n_entries++;
+        }
+    }
+
+    fseek(fp, 0, SEEK_SET); // Rewind to the beginning
+    return n_entries;
+}
+
+void Fichiers::LoadVerticesFromCSV(string VerticesFilename, vector<Dijkstra::Utils::Sommet>& Vertices) {
 
 	char** endptr;
 
 	FILE* fp = fopen(VerticesFilename.c_str(), &READONLY_MODE);
 
-	size_t n_entries = 0;
-
-	char c = 0;
-
-	while (c != EOF) {
-		c = getc(fp);
-
-		if (c == '\n') {
-			n_entries++;
-		}
-	}
-
-	c = 0;
-
-	fseek(fp, 0, SEEK_SET);
-	Vertices->reserve(n_entries);
+	size_t n_entries = CountLinesInFile(fp);
+	Vertices.reserve(n_entries);
 
 	uint8_t col_number = 0;
 	int64_t current_entry = 0;
@@ -126,6 +126,8 @@ void Fichiers::LoadVerticesFromCSV(string VerticesFilename, vector<Dijkstra::Uti
 	string current_x;
 	string current_y;
 	string current_z;
+
+	char c;
 
 	while (c != EOF) {
 		c = getc(fp);
@@ -146,7 +148,7 @@ void Fichiers::LoadVerticesFromCSV(string VerticesFilename, vector<Dijkstra::Uti
 			z = stod(current_z);
 
 			Utils::Sommet s = {id, name, x, y, z};
-			Vertices->push_back(s);
+			Vertices.emplace_back(s);
 
 			current_id = "";
 			current_x = "";
@@ -184,33 +186,19 @@ void Fichiers::LoadVerticesFromCSV(string VerticesFilename, vector<Dijkstra::Uti
 		}
 	}
 
-	Vertices->shrink_to_fit();
+	Vertices.shrink_to_fit();
 
 	// cout << n_entries << endl;
 	fclose(fp);
 }
 
-void Fichiers::LoadLinksFromCSV(string LinksFilename, vector<Dijkstra::Utils::Lien>* Links) {
+void Fichiers::LoadLinksFromCSV(string LinksFilename, vector<Dijkstra::Utils::Lien>& Links) {
 	//char **endptr;
 
 	FILE* fp = fopen(LinksFilename.c_str(), &READONLY_MODE);
 
-	size_t n_entries = 0;
-
-	char c = 0;
-
-	while (c != EOF) {
-		c = getc(fp);
-
-		if (c == '\n') {
-			n_entries++;
-		}
-	}
-
-	c = 0;
-
-	fseek(fp, 0, SEEK_SET);
-	Links->reserve(n_entries);
+	size_t n_entries = CountLinesInFile(fp);
+	Links.reserve(n_entries);
 
 	uint8_t col_number = 0;
 	int64_t current_entry = 0;
@@ -221,6 +209,8 @@ void Fichiers::LoadLinksFromCSV(string LinksFilename, vector<Dijkstra::Utils::Li
 
 	string current_idA = "";
 	string current_idB = "";
+
+	char c;
 
 	while (c != EOF) {
 		c = getc(fp);
@@ -243,7 +233,7 @@ void Fichiers::LoadLinksFromCSV(string LinksFilename, vector<Dijkstra::Utils::Li
 			}
 
 			Utils::Lien l = {idA, idB, type};
-			Links->push_back(l);
+			Links.emplace_back(l);
 
 			col_number = 0;
 			current_idA = "";
@@ -275,7 +265,7 @@ void Fichiers::LoadLinksFromCSV(string LinksFilename, vector<Dijkstra::Utils::Li
 		}
 	}
 
-	Links->shrink_to_fit();
+	Links.shrink_to_fit();
 
 	//cout << n_entries << endl;
 	fclose(fp);

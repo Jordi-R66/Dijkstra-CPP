@@ -27,8 +27,8 @@ void PreInit(string basename) {
 	string sommets_file = basename + "_s.tsv";
 	string liens_file = basename + "_l.tsv";
 
-	LoadVerticesFromCSV(sommets_file, &SOMMETS_OG);
-	LoadLinksFromCSV(liens_file, &LIENS_OG);
+	LoadVerticesFromCSV(sommets_file, SOMMETS_OG);
+	LoadLinksFromCSV(liens_file, LIENS_OG);
 
 	SOMMETS_OG.shrink_to_fit();
 	LIENS_OG.shrink_to_fit();
@@ -166,7 +166,7 @@ tuple<dict<Sommet*, double>, dict<Sommet*, Sommet*>> Algo(const vector<Lien>& LI
 
 	for (size_t i=0; i < SOMMETS.size(); i++) {
 		Sommet* s = SOMMETS.at(i);
-		SOMMETS_WORK.push_back(s);
+		SOMMETS_WORK.emplace_back(s);
 	}
 
 	tuple<dict<Sommet*, double>, dict<Sommet*, Sommet*>> Tuple_dP;
@@ -204,7 +204,7 @@ tuple<dict<Sommet*, double>, dict<Sommet*, Sommet*>> Algo(const vector<Lien>& LI
 	return make_tuple(d, predecesseur);
 }
 
-tuple<vector<s_id_t>, double> trouver_chemin(Sommet s_dep, Sommet s_fin, dict<s_id_t, s_id_t> predecesseurs_id, dict<Sommet*, double> d) {
+tuple<vector<s_id_t>, double> trouver_chemin(Sommet s_dep, Sommet s_fin, const dict<s_id_t, s_id_t>& predecesseurs_id, const dict<Sommet*, double>& d) {
 	s_id_t s_id = s_fin.id;
 	s_id_t dep_id = s_dep.id;
 
@@ -213,16 +213,16 @@ tuple<vector<s_id_t>, double> trouver_chemin(Sommet s_dep, Sommet s_fin, dict<s_
 	A.reserve(predecesseurs_id.size()+1);
 
 	while (s_id != dep_id) {
-		A.push_back(s_id);
+		A.emplace_back(s_id);
 		s_id = predecesseurs_id.at(s_id);
 	}
 
-	A.push_back(dep_id);
+	A.emplace_back(dep_id);
 	A.shrink_to_fit();
 
 	ranges::reverse(A);
 
-	return make_tuple(A, d[CORRESPONDANCE[s_fin.id]]);
+	return make_tuple(A, d.at(CORRESPONDANCE.at(s_fin.id)));
 }
 
 int main() {
@@ -253,7 +253,7 @@ int main() {
 				Sommet* s_ptr = &SOMMETS_OG.at(i);
 				Sommet s = *s_ptr;
 
-				SOMMETS.push_back(s_ptr);
+				SOMMETS.emplace_back(s_ptr);
 
 				if (s.name == dep_name) {
 					idA = s.id;
