@@ -83,14 +83,14 @@ double Poids(const Sommet& s1, const Sommet& s2) {
 	return poids;
 }
 
-vector<Sommet*> Voisins(Sommet s, vector<Sommet*> SOMMETS, vector<Lien>* LIENS) {
-	size_t n_liens = LIENS->size();
+vector<Sommet*> Voisins(Sommet s, const vector<Sommet*>& SOMMETS, const vector<Lien>& LIENS) {
+	size_t n_liens = LIENS.size();
 
 	vector<Sommet*> voisins;
 	voisins.reserve(s.neighbours.size());
 
 	for (size_t i=0; i < n_liens; i++) {
-		Lien l = LIENS->at(i);
+		Lien l = LIENS.at(i);
 
 		if ((s.id == l.idA) && (l.type != ERR)) {
 			Sommet* s2 = CORRESPONDANCE.at(l.idB);
@@ -157,15 +157,15 @@ tuple<dict<Sommet*, double>, dict<Sommet*, Sommet*>> maj_distances(Sommet* s1, S
 	return make_tuple(d, predecesseur);
 }
 
-tuple<dict<Sommet*, double>, dict<Sommet*, Sommet*>> Algo(vector<Lien>* LIENS, vector<Sommet*>* SOMMETS, Sommet s_dep) {
-	dict<Sommet*, double> d = Initialisation(*SOMMETS, &s_dep);
+tuple<dict<Sommet*, double>, dict<Sommet*, Sommet*>> Algo(const vector<Lien>& LIENS, const vector<Sommet*>& SOMMETS, Sommet s_dep) {
+	dict<Sommet*, double> d = Initialisation(SOMMETS, &s_dep);
 	dict<Sommet*, Sommet*> predecesseur = {};
 
 	vector<Sommet*> SOMMETS_WORK = {};
-	SOMMETS_WORK.reserve(SOMMETS->size());
+	SOMMETS_WORK.reserve(SOMMETS.size());
 
-	for (size_t i=0; i < SOMMETS->size(); i++) {
-		Sommet* s = SOMMETS->at(i);
+	for (size_t i=0; i < SOMMETS.size(); i++) {
+		Sommet* s = SOMMETS.at(i);
 		SOMMETS_WORK.push_back(s);
 	}
 
@@ -267,7 +267,7 @@ int main() {
 
 			auto start = chrono::high_resolution_clock::now();
 
-			tuple<dict<Sommet*, double>, dict<Sommet*, Sommet*>> AlgoOutput = Algo(&LIENS_OG, &SOMMETS, s_dep);
+			tuple<dict<Sommet*, double>, dict<Sommet*, Sommet*>> AlgoOutput = Algo(LIENS_OG, SOMMETS, s_dep);
 
 			auto finish = chrono::high_resolution_clock::now();
 
