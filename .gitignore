@@ -30,7 +30,7 @@
 .exe
 *.out
 *.app
-*.elf
+.elf
 
 # Dataset files
 # France.json
