@@ -1,12 +1,12 @@
 on:
-	push:
-		branches:
-      main
+    push:
+        branches:
+              main
 
 jobs:
   run_pull:
     name: run pull
-    runs_on: debian_latest
+    runs-on: debian_latest
 
     steps:
     - name: install ssh keys
