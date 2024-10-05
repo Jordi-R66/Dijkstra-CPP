@@ -67,6 +67,9 @@ void PreInit(string basename) {
 				if ((!inB) && (l.type == LIEN_BI)) {
 					sB->neighbours.push_back(idA);
 				}
+
+				sA->neighbours.shrink_to_fit();
+				sB->neighbours.shrink_to_fit();
 			}
 		}
 	}
@@ -84,7 +87,7 @@ vector<Sommet*> Voisins(Sommet s, vector<Sommet*> SOMMETS, vector<Lien>* LIENS) 
 	size_t n_liens = LIENS->size();
 
 	vector<Sommet*> voisins;
-	voisins.reserve(n_liens);
+	voisins.reserve(s.neighbours.size());
 
 	for (size_t i=0; i < n_liens; i++) {
 		Lien l = LIENS->at(i);
