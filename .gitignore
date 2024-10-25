@@ -40,5 +40,8 @@
 Algo.py
 Algo_Copie.py
 
+# debug directory
+debug/*
+
 # Others
 remote_compile.sh
