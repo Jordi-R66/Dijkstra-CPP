@@ -36,15 +36,15 @@ void PreInit(string basename) {
 	size_t TotalVertices = SOMMETS_OG.size();
 	size_t TotalLinks = LIENS_OG.size();
 
-	for (size_t i=0; i < TotalVertices; i++) {
+	for (size_t i = 0; i < TotalVertices; i++) {
 		Sommet* s = &SOMMETS_OG.at(i);
 
-		pair<s_id_t, Sommet*> to_insert = {s->id, s};
+		pair<s_id_t, Sommet*> to_insert = { s->id, s };
 
 		CORRESPONDANCE.insert(to_insert);
 	}
 
-	for (size_t i=0; i < TotalLinks; i++) {
+	for (size_t i = 0; i < TotalLinks; i++) {
 		Lien l = LIENS_OG.at(i);
 
 		if (l.type != ERR) {
@@ -57,8 +57,8 @@ void PreInit(string basename) {
 				Sommet* sA = CORRESPONDANCE.at(idA);
 				Sommet* sB = CORRESPONDANCE.at(idB);
 
-				bool inA = count(sA->neighbours.begin(), sA->neighbours.end(), idB) == 0 ? false: true;
-				bool inB = count(sB->neighbours.begin(), sB->neighbours.end(), idA) == 0 ? false: true;
+				bool inA = count(sA->neighbours.begin(), sA->neighbours.end(), idB) == 0 ? false : true;
+				bool inB = count(sB->neighbours.begin(), sB->neighbours.end(), idA) == 0 ? false : true;
 
 				if (!inA) {
 					sA->neighbours.push_back(idB);
@@ -89,20 +89,21 @@ vector<Sommet*> Voisins(Sommet s, const vector<Sommet*>& SOMMETS, const vector<L
 	vector<Sommet*> voisins;
 	voisins.reserve(s.neighbours.size());
 
-	for (size_t i=0; i < n_liens; i++) {
+	for (size_t i = 0; i < n_liens; i++) {
 		Lien l = LIENS.at(i);
 
 		if ((s.id == l.idA) && (l.type != ERR)) {
 			Sommet* s2 = CORRESPONDANCE.at(l.idB);
-			bool contains = count(SOMMETS.begin(), SOMMETS.end(), s2) == 0 ? false: true;
+			bool contains = count(SOMMETS.begin(), SOMMETS.end(), s2) == 0 ? false : true;
 
 			if (contains) {
 				voisins.push_back(s2);
 			}
 
-		} else if ((l.type == LIEN_BI) && (s.id == l.idB)) {
+		}
+		else if ((l.type == LIEN_BI) && (s.id == l.idB)) {
 			Sommet* s2 = CORRESPONDANCE.at(l.idA);
-			bool contains = count(SOMMETS.begin(), SOMMETS.end(), s2) == 0 ? false: true;
+			bool contains = count(SOMMETS.begin(), SOMMETS.end(), s2) == 0 ? false : true;
 
 			if (contains) {
 				voisins.push_back(s2);
@@ -120,12 +121,13 @@ dict<Sommet*, double> Initialisation(vector<Sommet*> SOMMETS, Sommet* s_dep_ptr)
 
 	dict<Sommet*, double> d = {};
 
-	for (size_t i=0; i < SOMMETS.size(); i++) {
+	for (size_t i = 0; i < SOMMETS.size(); i++) {
 		Sommet* s = SOMMETS.at(i);
 
 		if (*s != s_dep) {
 			d[s] = PosInf;
-		} else {
+		}
+		else {
 			d[s] = (double)0.0;
 		}
 	}
@@ -137,7 +139,7 @@ Sommet* Trouve_min(vector<Sommet*> SOMMETS, dict<Sommet*, double> d) {
 	double mini = PosInf;
 	Sommet* sommet = &SOMMET_NULL;
 
-	for (size_t i=0; i<SOMMETS.size(); i++) {
+	for (size_t i = 0; i < SOMMETS.size(); i++) {
 		Sommet* s = SOMMETS.at(i);
 		if (d[s] < mini) {
 			mini = d[s];
@@ -164,7 +166,7 @@ tuple<dict<Sommet*, double>, dict<Sommet*, Sommet*>> Algo(const vector<Lien>& LI
 	vector<Sommet*> SOMMETS_WORK = {};
 	SOMMETS_WORK.reserve(SOMMETS.size());
 
-	for (size_t i=0; i < SOMMETS.size(); i++) {
+	for (size_t i = 0; i < SOMMETS.size(); i++) {
 		Sommet* s = SOMMETS.at(i);
 		SOMMETS_WORK.emplace_back(s);
 	}
@@ -181,19 +183,19 @@ tuple<dict<Sommet*, double>, dict<Sommet*, Sommet*>> Algo(const vector<Lien>& LI
 			break;
 		}
 		if (contains_s1) {
-			for (size_t i=0; i < SOMMETS_WORK.size(); i++) {
+			for (size_t i = 0; i < SOMMETS_WORK.size(); i++) {
 				if (SOMMETS_WORK.at(i) == s1) {
 					s1_index = i;
 					break;
 				}
 			}
 
-			SOMMETS_WORK.erase(SOMMETS_WORK.begin()+s1_index);
+			SOMMETS_WORK.erase(SOMMETS_WORK.begin() + s1_index);
 		}
 
 		vector<Sommet*> voisins = Voisins(*s1, SOMMETS_WORK, LIENS);
 
-		for (size_t i=0; i < voisins.size(); i++) {
+		for (size_t i = 0; i < voisins.size(); i++) {
 			Sommet* s2 = voisins.at(i);
 			Tuple_dP = maj_distances(s1, s2, d, predecesseur);
 			d = get<0>(Tuple_dP);
@@ -210,7 +212,7 @@ tuple<vector<s_id_t>, double> trouver_chemin(Sommet s_dep, Sommet s_fin, const d
 
 	vector<s_id_t> A = {};
 
-	A.reserve(predecesseurs_id.size()+1);
+	A.reserve(predecesseurs_id.size() + 1);
 
 	while (s_id != dep_id) {
 		A.emplace_back(s_id);
@@ -225,15 +227,27 @@ tuple<vector<s_id_t>, double> trouver_chemin(Sommet s_dep, Sommet s_fin, const d
 	return make_tuple(A, d.at(CORRESPONDANCE.at(s_fin.id)));
 }
 
-int main() {
-	string basename = "";
+int main(int argc, char* argv[]) {
+
+	string basename, dep_name, fin_name;
+	bool passed = false;
+
+	basename = "";
+
+	if (argc == 4) {
+		basename = argv[1];
+		dep_name = argv[2];
+		fin_name = argv[3];
+
+		passed = true;
+	}
 
 	s_id_t idA, idB;
 
-	//PreInit(basename);
-
-	printf("Name of your files : ");
-	cin >> basename;
+	if (!passed) {
+		printf("Name of your files : ");
+		cin >> basename;
+	}
 
 	if (basename.size() > 0) {
 		PreInit(basename);
@@ -241,15 +255,15 @@ int main() {
 		vector<Sommet*> SOMMETS = {};
 		SOMMETS.reserve(SOMMETS_OG.size());
 
-		string dep_name, fin_name;
-
-		printf("Starting point : ");
-		cin >> dep_name;
-		printf("End point : ");
-		cin >> fin_name;
+		if (!passed) {
+			printf("Starting point : ");
+			cin >> dep_name;
+			printf("End point : ");
+			cin >> fin_name;
+		}
 
 		if ((dep_name.size() > 0) && (fin_name.size() > 0) && (dep_name != fin_name)) {
-			for (size_t i=0; i<SOMMETS_OG.size(); i++) {
+			for (size_t i = 0; i < SOMMETS_OG.size(); i++) {
 				Sommet* s_ptr = &SOMMETS_OG.at(i);
 				Sommet s = *s_ptr;
 
@@ -257,7 +271,8 @@ int main() {
 
 				if (s.name == dep_name) {
 					idA = s.id;
-				} else if (s.name == fin_name) {
+				}
+				else if (s.name == fin_name) {
 					idB = s.id;
 				}
 			}
@@ -271,7 +286,7 @@ int main() {
 
 			auto finish = chrono::high_resolution_clock::now();
 
-			int64_t generation_time = chrono::duration_cast<chrono::nanoseconds>(finish-start).count();
+			int64_t generation_time = chrono::duration_cast<chrono::nanoseconds>(finish - start).count();
 
 			dict<Sommet*, double> d = get<0>(AlgoOutput);
 			dict<Sommet*, Sommet*> predecesseurs = get<1>(AlgoOutput);
@@ -298,18 +313,19 @@ int main() {
 			string output = "";
 
 			if (DistanceChemin != PosInf) {
-				for (size_t i=0; i<Chemin.size(); i++) {
+				for (size_t i = 0; i < Chemin.size(); i++) {
 					string s_name = CORRESPONDANCE[Chemin.at(i)]->name;
 
 					output += s_name;
 
-					if (i != (Chemin.size()-1)) {
+					if (i != (Chemin.size() - 1)) {
 						output += " -> ";
 					}
 				}
 
-				printf("Path to go from %s to %s (%lf) :\n%s\nPath found in %.3lf ms!\n", dep_name.c_str(), fin_name.c_str(), DistanceChemin, output.c_str(), (double)(generation_time)/1e6);
-			} else {
+				printf("Path to go from %s to %s (%lf) :\n%s\nPath found in %.3lf ms!\n", dep_name.c_str(), fin_name.c_str(), DistanceChemin, output.c_str(), (double)(generation_time) / 1e6);
+			}
+			else {
 				printf("Error : There is no path between those two points\n");
 			}
 		}
